@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LevelService } from './level.service';
+import { RequestLevelDto } from './dto/request-level.dto';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { ResponseLevelDto } from './dto/response-level.dto';
@@ -19,9 +20,9 @@ export class LevelController {
   @UseInterceptors(PaginationInterceptor)
   @Get()
   async findAll(
-    @Query('page') page: number = 1,
-    @Query('level') level: string,
-  ): Promise<{ data: ResponseListLevelDto[], totalCount: number}> {
+    @Query() query: RequestLevelDto
+  ): Promise<{ data: ResponseListLevelDto[], totalCount: number }> {
+    const { level, page } = query;
     return this.levelService.findAll(level, page);
   }
 

@@ -1,43 +1,41 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-   DropdownMenu,
-   DropdownMenuContent,
-   DropdownMenuItem,
-   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from "react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
 
 export function AppTopbar() {
-   const { setTheme, theme } = useTheme();
+   const { theme, setTheme } = useTheme();
+   const [mounted, setMounted] = useState(false);
+
+   useEffect(() => {
+      setMounted(true);
+   }, []);
+
+   const Icon = !mounted
+      ? Sun
+      : theme === "light"
+         ? Moon
+         : Sun;
 
    return (
-      <header className="w-full bg-background border-b p-4 flex justify-between items-center">
-         <h1 className="text-xl font-bold">Gazin Test Dashboard</h1>
-         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-               <Button variant="outline" size="icon" aria-label="Mudar tema">
-                  {theme === "light" ? (
-                     <Sun className="h-5 w-5" />
-                  ) : (
-                     <Moon className="h-5 w-5" />
-                  )}
-               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-               <DropdownMenuItem onClick={() => setTheme("light")}>
-                  Claro
-               </DropdownMenuItem>
-               <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  Escuro
-               </DropdownMenuItem>
-               <DropdownMenuItem onClick={() => setTheme("system")}>
-                  Sistema
-               </DropdownMenuItem>
-            </DropdownMenuContent>
-         </DropdownMenu>
+      <header className="h-14 border-b-0 flex items-center justify-between px-4 bg-background">
+         <div className="flex items-center gap-2">
+            <SidebarTrigger />
+         </div>
+
+         <div className="flex items-center gap-2">
+            <Button
+               size="icon"
+               variant="ghost"
+               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            >
+               <Icon className="h-4 w-4" />
+            </Button>
+
+         </div>
       </header>
    );
 }

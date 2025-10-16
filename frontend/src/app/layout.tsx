@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/common/AppSidebar";
 import { AppTopbar } from "@/components/common/AppTopbar";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import "@/styles/globals.css";
+import { ReactQueryProvider } from "@/components/common/ReactQueryProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,18 +34,22 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <div className="flex flex-col h-screen">
-            <div className="flex flex-1">
-
-              <SidebarProvider>
-                <AppSidebar />
-                <main>
-                  <SidebarTrigger />
-                  {children}
-                </main>
-              </SidebarProvider>
+          <ReactQueryProvider>
+            <div className="flex flex-col h-screen">
+              <div className="flex flex-1">
+                <SidebarProvider>
+                  <AppSidebar />
+                  <div className="flex flex-col flex-1">
+                    <AppTopbar />
+                    <main className="flex-1 p-4">
+                      {children}
+                      <Toaster />
+                    </main>
+                  </div>
+                </SidebarProvider>
+              </div>
             </div>
-          </div>
+          </ReactQueryProvider>
         </ThemeProvider>
       </body>
     </html>
